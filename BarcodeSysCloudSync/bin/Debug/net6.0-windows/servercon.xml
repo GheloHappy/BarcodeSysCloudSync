@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Servers>
+	<Server>
+		<Title>mdiserver-l</Title>
+		<database>BarcodeInOut</database>
+	</Server>
+</Servers>
