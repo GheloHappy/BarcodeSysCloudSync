@@ -4,7 +4,13 @@
     <Compile Update="DTFrm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="IssuingFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="MainFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="OSFrm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="VanFrm.cs">

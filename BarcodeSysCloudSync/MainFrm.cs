@@ -45,5 +45,17 @@ namespace BarcodeSysCloudSync
             VanFrm vanFrm = new VanFrm();
             vanFrm.ShowDialog();
         }
+
+        private void btnOs_Click_1(object sender, EventArgs e)
+        {
+            OSFrm osFrm = new OSFrm();
+            osFrm.ShowDialog();
+        }
+
+        private void btnIssue_Click(object sender, EventArgs e)
+        {
+            IssuingFrm isueFrm = new IssuingFrm();
+            isueFrm.ShowDialog();
+        }
     }
 }

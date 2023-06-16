@@ -33,6 +33,7 @@
             this.btnSyncDate = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
             this.btnOs = new System.Windows.Forms.Button();
+            this.btnIssue = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnVan
@@ -98,12 +99,28 @@
             this.btnOs.TabIndex = 11;
             this.btnOs.Text = "OS";
             this.btnOs.UseVisualStyleBackColor = false;
+            this.btnOs.Click += new System.EventHandler(this.btnOs_Click_1);
+            // 
+            // btnIssue
+            // 
+            this.btnIssue.BackColor = System.Drawing.Color.Red;
+            this.btnIssue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnIssue.Font = new System.Drawing.Font("Segoe UI", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnIssue.ForeColor = System.Drawing.Color.White;
+            this.btnIssue.Location = new System.Drawing.Point(186, 132);
+            this.btnIssue.Name = "btnIssue";
+            this.btnIssue.Size = new System.Drawing.Size(178, 91);
+            this.btnIssue.TabIndex = 12;
+            this.btnIssue.Text = "ISSUING";
+            this.btnIssue.UseVisualStyleBackColor = false;
+            this.btnIssue.Click += new System.EventHandler(this.btnIssue_Click);
             // 
             // MainFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(375, 304);
+            this.Controls.Add(this.btnIssue);
             this.Controls.Add(this.btnOs);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.btnSyncDate);
@@ -126,5 +143,6 @@
         private Button btnSyncDate;
         private Label lblStatus;
         private Button btnOs;
+        private Button btnIssue;
     }
 }

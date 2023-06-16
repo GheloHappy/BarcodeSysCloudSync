@@ -49,6 +49,7 @@ namespace BarcodeSysCloudSync.Class
         SqlDataAdapter sda;
         SqlCommand cmd;
 
+        //DT
         public bool InsertDT(DataTable dtDT)
         {
             try
@@ -67,8 +68,8 @@ namespace BarcodeSysCloudSync.Class
 
                         if (CheckDT(dt, schedDate, solomonID, uom))
                         {
-                            using (cmd = new SqlCommand("UPDATE barcodesys_DTInventory SET  qty = @qty, uomOg = @uomOg, qtyOg = @qtyOg , cnvFact = @cnvFact WHERE schedDate = @schedDate AND " +
-                                "dt = @dt AND solomonID = @solomonID", conn))
+                            using (cmd = new SqlCommand("UPDATE barcodesys_DTInventory SET  qty = @qty, uomOg = @uomOg, qtyOg = @qtyOg , cnvFact = @cnvFact , InvcNbr = @InvcNbr WHERE schedDate = @schedDate AND " +
+                                "dt = @dt AND solomonID = @solomonID AND InvcNbr = @InvcNbr", conn))
                             {
                                 cmd.Parameters.AddWithValue("@schedDate", row["schedDate"].ToString());
                                 cmd.Parameters.AddWithValue("@dt", dt);
@@ -78,14 +79,15 @@ namespace BarcodeSysCloudSync.Class
                                 cmd.Parameters.AddWithValue("@cnvFact", Int32.Parse(row["cnvFact"].ToString()));
                                 cmd.Parameters.AddWithValue("@uomOg",row["uomOg"].ToString());
                                 cmd.Parameters.AddWithValue("@qtyOg", Int32.Parse(row["qtyOg"].ToString()));
+                                cmd.Parameters.AddWithValue("@InvcNbr", row["InvcNbr"].ToString());
 
                                 cmd.ExecuteNonQuery();
                             }
                         }
                         else
                         {
-                            using (cmd = new SqlCommand("INSERT INTO barcodesys_DTInventory (schedDate,dt,solomonID,uom,qty,CnvFact,uomOg,qtyOg) VALUES (@schedDate,@dt,@solomonID,@uom," +
-                            "@qty,@cnvFact,@uomOg,@qtyOg)", conn))
+                            using (cmd = new SqlCommand("INSERT INTO barcodesys_DTInventory (schedDate,dt,solomonID,uom,qty,CnvFact,uomOg,qtyOg,InvcNbr) VALUES (@schedDate,@dt,@solomonID,@uom," +
+                            "@qty,@cnvFact,@uomOg,@qtyOg,@InvcNbr)", conn))
                             {
                                 cmd.Parameters.AddWithValue("@schedDate", row["schedDate"].ToString());
                                 cmd.Parameters.AddWithValue("@dt", dt);
@@ -95,6 +97,7 @@ namespace BarcodeSysCloudSync.Class
                                 cmd.Parameters.AddWithValue("@cnvFact", Int32.Parse(row["cnvFact"].ToString()));
                                 cmd.Parameters.AddWithValue("@uomOg", row["uomOg"].ToString());
                                 cmd.Parameters.AddWithValue("@qtyOg", Int32.Parse(row["qtyOg"].ToString()));
+                                cmd.Parameters.AddWithValue("@InvcNbr", row["InvcNbr"].ToString());
 
                                 cmd.ExecuteNonQuery();
                             }
@@ -207,6 +210,176 @@ namespace BarcodeSysCloudSync.Class
                                 cmd.Parameters.AddWithValue("@Qty", Int32.Parse(row["Qty"].ToString()));
                                 cmd.Parameters.AddWithValue("@PriceClass", row["PriceClass"].ToString());
                                 cmd.Parameters.AddWithValue("@ToSiteID", row["ToSiteID"].ToString());
+
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+
+                    conn.Close();
+                    return true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return false;
+            }
+        }
+
+        //OS
+        public bool CheckOS(string invcNbr, string invcDate, string solomonId, string uom)
+        {
+            DataTable dtCheck = new DataTable();
+            try
+            {
+                sda = new SqlDataAdapter("SELECT InvcNbr FROM barcodesys_OSInventory WHERE InvcNbr = '" + invcNbr + "' AND InvcDate = '" + invcDate + "' AND InvtID = '" + solomonId + "' AND UnitDesc = '" + uom + "'", conn);
+                dtCheck = new DataTable();
+                sda.Fill(dtCheck);
+
+                if (dtCheck.Rows.Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return false;
+            }
+        }
+
+        public bool InsertOS(DataTable dtOs)
+        {
+            try
+            {
+                sqlCon();
+                using (conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+
+                    foreach (DataRow row in dtOs.Rows)
+                    {
+                        string InvcDate = row["InvcDate"].ToString();
+                        string InvcNbr = row["InvcNbr"].ToString();
+                        string InvtID = row["InvtID"].ToString();
+                        string UnitDesc = row["UnitDesc"].ToString();
+
+
+                        if (CheckOS(InvcNbr, InvcDate, InvtID, UnitDesc))
+                        {
+                            using (cmd = new SqlCommand("UPDATE barcodesys_OSInventory SET  QtyShip = @QtyShip, UnitDesc = @UnitDesc WHERE InvcDate = @InvcDate AND " +
+                                "InvcNbr = @InvcNbr AND InvtID = @InvtID", conn))
+                            {
+                                cmd.Parameters.AddWithValue("@QtyShip", Int32.Parse(row["QtyShip"].ToString()));
+                                cmd.Parameters.AddWithValue("@UnitDesc", UnitDesc);
+                                cmd.Parameters.AddWithValue("@InvcDate", InvcDate);
+                                cmd.Parameters.AddWithValue("@InvcNbr", InvcNbr);
+                                cmd.Parameters.AddWithValue("@InvtID", InvtID);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        else
+                        {
+                            using (cmd = new SqlCommand("INSERT INTO barcodesys_OSInventory (InvcDate,InvcNbr,InvtID,Descr,UnitDesc,QtyShip) VALUES (@InvcDate,@InvcNbr,@InvtID,@Descr," +
+                            "@UnitDesc,@QtyShip)", conn))
+                            {
+                                cmd.Parameters.AddWithValue("@InvcDate", InvcDate);
+                                cmd.Parameters.AddWithValue("@InvcNbr", InvcNbr);
+                                cmd.Parameters.AddWithValue("@InvtID", InvtID);
+                                cmd.Parameters.AddWithValue("@Descr", row["Descr"].ToString());
+                                cmd.Parameters.AddWithValue("@UnitDesc", UnitDesc);
+                                cmd.Parameters.AddWithValue("@QtyShip", Int32.Parse(row["QtyShip"].ToString()));
+
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+
+                    conn.Close();
+                    return true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return false;
+            }
+        }
+
+        //ISSUE
+        public bool CheckIssue(string invcNbr, string invcDate, string solomonId, string uom)
+        {
+            DataTable dtCheck = new DataTable();
+            try
+            {
+                sda = new SqlDataAdapter("SELECT InvcNbr FROM barcodesys_OSInventory WHERE InvcNbr = '" + invcNbr + "' AND InvcDate = '" + invcDate + "' AND InvtID = '" + solomonId + "' AND UnitDesc = '" + uom + "'", conn);
+                dtCheck = new DataTable();
+                sda.Fill(dtCheck);
+
+                if (dtCheck.Rows.Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return false;
+            }
+        }
+
+        public bool InsertIssue(DataTable dtOs)
+        {
+            try
+            {
+                sqlCon();
+                using (conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+
+                    foreach (DataRow row in dtOs.Rows)
+                    {
+                        string TranDate = row["TranDate"].ToString();
+                        string RefNbr = row["RefNbr"].ToString();
+                        string InvtID = row["InvtID"].ToString();
+                        string UnitDesc = row["UnitDesc"].ToString();
+
+
+                        if (CheckIssue(RefNbr, TranDate, InvtID, UnitDesc))
+                        {
+                            using (cmd = new SqlCommand("UPDATE barcodesys_IssueInventory SET  Qty = @Qty, UnitDesc = @UnitDesc WHERE TranDate = @TranDate AND " +
+                                "RefNbr = @RefNbr AND InvtID = @InvtID", conn))
+                            {
+                                cmd.Parameters.AddWithValue("@Qty", Int32.Parse(row["Qty"].ToString()));
+                                cmd.Parameters.AddWithValue("@UnitDesc", UnitDesc);
+                                cmd.Parameters.AddWithValue("@TranDate", TranDate);
+                                cmd.Parameters.AddWithValue("@RefNbr", RefNbr);
+                                cmd.Parameters.AddWithValue("@InvtID", InvtID);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        else
+                        {
+                            using (cmd = new SqlCommand("INSERT INTO barcodesys_IssueInventory (TranDate,RefNbr,InvtID,Descr,UnitDesc,Qty) VALUES (@TranDate,@RefNbr,@InvtID,@Descr," +
+                            "@UnitDesc,@Qty)", conn))
+                            {
+                                cmd.Parameters.AddWithValue("@TranDate", TranDate);
+                                cmd.Parameters.AddWithValue("@RefNbr", RefNbr);
+                                cmd.Parameters.AddWithValue("@InvtID", InvtID);
+                                cmd.Parameters.AddWithValue("@Descr", row["Descr"].ToString());
+                                cmd.Parameters.AddWithValue("@UnitDesc", UnitDesc);
+                                cmd.Parameters.AddWithValue("@Qty", Int32.Parse(row["Qty"].ToString()));
 
                                 cmd.ExecuteNonQuery();
                             }

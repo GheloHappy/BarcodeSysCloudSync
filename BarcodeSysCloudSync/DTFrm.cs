@@ -48,6 +48,7 @@ namespace BarcodeSysCloudSync
                 dtDT.Columns.Add("cnvFact", typeof(int));
                 dtDT.Columns.Add("uomOg", typeof(string));
                 dtDT.Columns.Add("qtyOg", typeof(int));
+                dtDT.Columns.Add("InvcNbr", typeof(string));
 
                 foreach (dynamic item in data)
                 {
@@ -62,8 +63,9 @@ namespace BarcodeSysCloudSync
                         int cnvFact = item.CnvFact;
                         string uomOg = item.uomOg;
                         int qtyOg = item.qtyOg;
+                        string InvcNbr = item.InvcNbr;
 
-                        dtDT.Rows.Add(schedDate,dt,solomonID,uom,qty, cnvFact, uomOg, qtyOg);
+                        dtDT.Rows.Add(schedDate,dt,solomonID,uom,qty, cnvFact, uomOg, qtyOg, InvcNbr);
                         //MessageBox.Show(schedDate + "-" + dt + "-" + solomonID);
                     } 
                     else
