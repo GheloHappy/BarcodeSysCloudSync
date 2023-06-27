@@ -65,8 +65,9 @@ namespace BarcodeSysCloudSync.Class
                         string dt = row["dt"].ToString();
                         string solomonID = row["solomonID"].ToString();
                         string uom = row["uom"].ToString();
+                        string invcNbr = row["InvcNbr"].ToString();
 
-                        if (CheckDT(dt, schedDate, solomonID, uom))
+                        if (CheckDT(dt, schedDate, solomonID, uom, invcNbr))
                         {
                             using (cmd = new SqlCommand("UPDATE barcodesys_DTInventory SET  qty = @qty, uomOg = @uomOg, qtyOg = @qtyOg , cnvFact = @cnvFact , InvcNbr = @InvcNbr WHERE schedDate = @schedDate AND " +
                                 "dt = @dt AND solomonID = @solomonID AND InvcNbr = @InvcNbr", conn))
@@ -116,12 +117,12 @@ namespace BarcodeSysCloudSync.Class
             }
         }
 
-        public bool CheckDT(string dt, string dtDate, string solomonID, string uom)
+        public bool CheckDT(string dt, string dtDate, string solomonID, string uom, string invcNbr)
         {
             DataTable dtCheck = new DataTable();
             try
             {
-                sda = new SqlDataAdapter("SELECT solomonID FROM barcodesys_DTInventory WHERE schedDate = '" + dtDate + "' AND dt = '"+dt+"' AND solomonID = '"+solomonID+"' AND uomOg = '"+ uom+"'", conn);
+                sda = new SqlDataAdapter("SELECT solomonID FROM barcodesys_DTInventory WHERE schedDate = '" + dtDate + "' AND dt = '"+dt+"' AND solomonID = '"+solomonID+"' AND uomOg = '"+ uom+"' AND InvcNbr = '"+invcNbr+"'", conn);
                 dtCheck = new DataTable();
                 sda.Fill(dtCheck);
 
@@ -199,8 +200,8 @@ namespace BarcodeSysCloudSync.Class
                         }
                         else
                         {
-                            using (cmd = new SqlCommand("INSERT INTO barcodesys_VaNInventory (TranDate,RefNbr,InvtID,Descr,UnitDesc,Qty,PriceClass,ToSiteID) VALUES (@TranDate,@RefNbr,@InvtID,@Descr," +
-                            "@UnitDesc,@Qty,@PriceClass,@ToSiteID)", conn))
+                            using (cmd = new SqlCommand("INSERT INTO barcodesys_VaNInventory (TranDate,RefNbr,InvtID,Descr,UnitDesc,Qty,PriceClass,ToSiteID,CnvFact) VALUES (@TranDate,@RefNbr,@InvtID,@Descr," +
+                            "@UnitDesc,@Qty,@PriceClass,@ToSiteID,@CnvFact)", conn))
                             {
                                 cmd.Parameters.AddWithValue("@TranDate", TranDate);
                                 cmd.Parameters.AddWithValue("@RefNbr", RefNbr);
@@ -210,6 +211,7 @@ namespace BarcodeSysCloudSync.Class
                                 cmd.Parameters.AddWithValue("@Qty", Int32.Parse(row["Qty"].ToString()));
                                 cmd.Parameters.AddWithValue("@PriceClass", row["PriceClass"].ToString());
                                 cmd.Parameters.AddWithValue("@ToSiteID", row["ToSiteID"].ToString());
+                                cmd.Parameters.AddWithValue("@CnvFact", Int32.Parse(row["CnvFact"].ToString()));
 
                                 cmd.ExecuteNonQuery();
                             }
@@ -286,8 +288,8 @@ namespace BarcodeSysCloudSync.Class
                         }
                         else
                         {
-                            using (cmd = new SqlCommand("INSERT INTO barcodesys_OSInventory (InvcDate,InvcNbr,InvtID,Descr,UnitDesc,QtyShip) VALUES (@InvcDate,@InvcNbr,@InvtID,@Descr," +
-                            "@UnitDesc,@QtyShip)", conn))
+                            using (cmd = new SqlCommand("INSERT INTO barcodesys_OSInventory (InvcDate,InvcNbr,InvtID,Descr,UnitDesc,QtyShip,CnvFact) VALUES (@InvcDate,@InvcNbr,@InvtID,@Descr," +
+                            "@UnitDesc,@QtyShip,@CnvFact)", conn))
                             {
                                 cmd.Parameters.AddWithValue("@InvcDate", InvcDate);
                                 cmd.Parameters.AddWithValue("@InvcNbr", InvcNbr);
@@ -295,6 +297,7 @@ namespace BarcodeSysCloudSync.Class
                                 cmd.Parameters.AddWithValue("@Descr", row["Descr"].ToString());
                                 cmd.Parameters.AddWithValue("@UnitDesc", UnitDesc);
                                 cmd.Parameters.AddWithValue("@QtyShip", Int32.Parse(row["QtyShip"].ToString()));
+                                cmd.Parameters.AddWithValue("@CnvFact", Int32.Parse(row["CnvFact"].ToString()));
 
                                 cmd.ExecuteNonQuery();
                             }
@@ -371,8 +374,8 @@ namespace BarcodeSysCloudSync.Class
                         }
                         else
                         {
-                            using (cmd = new SqlCommand("INSERT INTO barcodesys_IssueInventory (TranDate,RefNbr,InvtID,Descr,UnitDesc,Qty) VALUES (@TranDate,@RefNbr,@InvtID,@Descr," +
-                            "@UnitDesc,@Qty)", conn))
+                            using (cmd = new SqlCommand("INSERT INTO barcodesys_IssueInventory (TranDate,RefNbr,InvtID,Descr,UnitDesc,Qty,CnvFact) VALUES (@TranDate,@RefNbr,@InvtID,@Descr," +
+                            "@UnitDesc,@Qty, @CnvFact)", conn))
                             {
                                 cmd.Parameters.AddWithValue("@TranDate", TranDate);
                                 cmd.Parameters.AddWithValue("@RefNbr", RefNbr);
@@ -380,6 +383,7 @@ namespace BarcodeSysCloudSync.Class
                                 cmd.Parameters.AddWithValue("@Descr", row["Descr"].ToString());
                                 cmd.Parameters.AddWithValue("@UnitDesc", UnitDesc);
                                 cmd.Parameters.AddWithValue("@Qty", Int32.Parse(row["Qty"].ToString()));
+                                cmd.Parameters.AddWithValue("@CnvFact", Int32.Parse(row["CnvFact"].ToString()));
 
                                 cmd.ExecuteNonQuery();
                             }

@@ -43,6 +43,7 @@ namespace BarcodeSysCloudSync
                 dtVan.Columns.Add("Qty", typeof(int));
                 dtVan.Columns.Add("PriceClass", typeof(string));
                 dtVan.Columns.Add("ToSiteID", typeof(string));
+                dtVan.Columns.Add("CnvFact", typeof(int));
 
                 foreach (dynamic item in data)
                 {
@@ -57,8 +58,9 @@ namespace BarcodeSysCloudSync
                         int Qty = item.Qty;
                         string PriceClass = item.PriceClass.ToString().Trim();
                         string ToSiteID = item.ToSiteID.ToString().Trim();
+                        int CnvFact = item.CnvFact;
 
-                        dtVan.Rows.Add(tranDate, RefNbr, InvtID, Descr, UnitDesc, Qty, PriceClass, ToSiteID);
+                        dtVan.Rows.Add(tranDate, RefNbr, InvtID, Descr, UnitDesc, Qty, PriceClass, ToSiteID, CnvFact);
                     }
                     else
                     {

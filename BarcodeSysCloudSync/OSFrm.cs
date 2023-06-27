@@ -43,6 +43,7 @@ namespace BarcodeSysCloudSync
                 dtOS.Columns.Add("Descr", typeof(string));
                 dtOS.Columns.Add("UnitDesc", typeof(string));
                 dtOS.Columns.Add("QtyShip", typeof(int));
+                dtOS.Columns.Add("CnvFact", typeof(int));
 
                 foreach (dynamic item in data)
                 {
@@ -55,8 +56,9 @@ namespace BarcodeSysCloudSync
                         string Descr = item.Descr.ToString().Trim();
                         string UnitDesc = item.UnitDesc.ToString().Trim();
                         int Qty = item.QtyShip;
+                        int CnvFact = item.CnvFact;
 
-                        dtOS.Rows.Add(invcDate, RefNbr, InvtID, Descr, UnitDesc, Qty);
+                        dtOS.Rows.Add(invcDate, RefNbr, InvtID, Descr, UnitDesc, Qty, CnvFact);
                     }
                     else
                     {

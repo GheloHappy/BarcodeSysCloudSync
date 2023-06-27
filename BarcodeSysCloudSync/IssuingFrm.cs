@@ -47,20 +47,22 @@ namespace BarcodeSysCloudSync
                 dtIssue.Columns.Add("Descr", typeof(string));
                 dtIssue.Columns.Add("UnitDesc", typeof(string));
                 dtIssue.Columns.Add("Qty", typeof(int));
+                dtIssue.Columns.Add("CnvFact", typeof(int));
 
                 foreach (dynamic item in data)
                 {
                     if (item != null)
                     {
-                        _tranDate = Convert.ToDateTime(item.User9);
+                        _tranDate = Convert.ToDateTime(item.TranDate);
                         tranDate = _tranDate.ToString("yyyy-MM-dd").Trim();
                         string RefNbr = item.RefNbr.ToString().Trim();
                         string InvtID = item.InvtID.ToString().Trim();
                         string Descr = item.Descr.ToString().Trim();
                         string UnitDesc = item.UnitDesc.ToString().Trim();
                         int Qty = item.Qty;
+                        int CnvFact = item.CnvFact;
 
-                        dtIssue.Rows.Add(tranDate, RefNbr, InvtID, Descr, UnitDesc, Qty);
+                        dtIssue.Rows.Add(tranDate, RefNbr, InvtID, Descr, UnitDesc, Qty, CnvFact);
                     }
                     else
                     {
